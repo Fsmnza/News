@@ -1,0 +1,29 @@
+{{template "base" .}}
+{{define "title"}}Create News{{end}}
+{{define "main"}}
+<h>ADD A NEW NEWS</h>
+<form method="post" action="/news/create" style="width: 650px">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" rows="4" required></textarea>
+    <br>
+<!--    <div>-->
+<!--        <label>Delete in:</label>-->
+<!--        <input type='radio' name='expires' value='365' checked> One Year-->
+<!--        <input type='radio' name='expires' value='7'> One Week-->
+<!--        <input type='radio' name='expires' value='1'> One Day-->
+<!--    </div>-->
+<!--    <br>-->
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+        <option value="Students">Students</option>
+        <option value="Staff">Staff</option>
+        <option value="Applicants">Applicants</option>
+        <option value="Researches">Researches</option>
+    </select>
+    <br>
+    <button type="submit" style="display: flex">Publish News</button>
+</form>
+{{end}}

@@ -1,0 +1,38 @@
+{{template "base" .}}
+{{define "title"}}Admin Panel{{end}}
+{{define "main"}}
+<h2>Manage User Roles</h2>
+{{if .UserArray}}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Update</th>
+    </tr>
+    {{range .UserArray}}
+    <tr>
+        <form method="post" action="/user/role">
+            <td>{{.ID}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Email}}</td>
+            <td>{{.Role}}</td>
+            <td>
+                <label for="role_{{.ID}}">New Role:</label>
+                <select name="newRole" id="role_{{.ID}}">
+                    <option value="user">User</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <input type='submit' style="height: 50px; width: 90px; font-size: 9px" value='Update Role'>
+                <input type="hidden" name="userID" value="{{.ID}}">
+            </td>
+        </form>
+    </tr>
+    {{end}}
+</table>
+{{else}}
+<p>No users</p>
+{{end}}
+{{end}}

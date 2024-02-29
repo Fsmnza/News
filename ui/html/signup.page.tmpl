@@ -1,0 +1,30 @@
+{{template "base" .}}
+{{define "title"}}Signup{{end}}
+{{define "main"}}
+<form action='/user/signup' method='POST' novalidate>
+    <div style="width: 480px; height: 40px">
+        <label for="name">Name:</label>
+        <input type='text' id='name' name="name">
+    </div>
+    <br>
+    <br>
+    <br>
+    <div style="width: 480px; height: 40px">
+        <label for="email">Email:</label>
+        <input type='email' name='email' id="email">
+    </div>
+    <br>
+    <br>
+    <br>
+    <div style="width: 480px; height: 40px">
+        <label for="password">Password:</label>
+        <input type='password' name='password' id="password">
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+        <input type='submit' value='Signup'>
+    </div>
+</form>
+{{end}}

@@ -1,0 +1,23 @@
+{{template "base" .}}
+{{define "title"}}Home{{end}}
+{{define "main"}}
+<h2>Latest Articles</h2> {{if .NewsArray}}
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Created</th>
+        <th>Category</th>
+        <th>ID</th>
+    </tr>
+    {{range .NewsArray}}
+    <tr>
+        <td><a href='/news?id={{.ID}}'>{{.Title}}</a></td>
+        <td>{{.Date}}</td>
+        <td>{{.Category}}</td>
+        <td>#{{.ID}}</td>
+    </tr>
+    {{end}}
+</table>
+{{else}}
+<p>There's nothing to see here... yet!</p>
+{{end}} {{end}}
