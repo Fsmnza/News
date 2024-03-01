@@ -21,12 +21,15 @@ const (
 )
 
 type User struct {
-	ID             int
-	Name           string
-	Email          string
-	HashedPassword []byte
-	Created        time.Time
-	Role           string
+	ID              int
+	Name            string
+	Email           string
+	HashedPassword  []byte
+	Created         time.Time
+	Role            string
+	UserID          int
+	IsAuthenticated bool
+	UserRole        string
 }
 
 type News struct {
@@ -35,4 +38,11 @@ type News struct {
 	Content  string
 	Date     time.Time
 	Category string
+}
+type Comments struct {
+	ID     int
+	UserId int
+	NewsId int
+	Text   string
+	User   *User
 }

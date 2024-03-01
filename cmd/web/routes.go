@@ -20,6 +20,8 @@ func (app *application) routes() http.Handler {
 	mux.Post("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser))
 	mux.Get("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm))
 	mux.Post("/user/role", dynamicMiddleware.ThenFunc(app.Role))
+	mux.Post("/comment/add", dynamicMiddleware.ThenFunc(app.AddComments))
+	mux.Post("/comment/delete", dynamicMiddleware.ThenFunc(app.deleteComment))
 	mux.Get("/user/admin", dynamicMiddleware.ThenFunc(app.Admin))
 	mux.Post("/user/login", dynamicMiddleware.ThenFunc(app.loginUser))
 	mux.Post("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser))

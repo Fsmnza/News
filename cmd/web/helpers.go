@@ -25,6 +25,9 @@ func (app *application) notFound(w http.ResponseWriter) {
 func (app *application) isAuthenticated(r *http.Request) bool {
 	return app.session.Exists(r, "authenticatedUserID")
 }
+func (app *application) userAuthenticated(r *http.Request) bool {
+	return app.session.Exists(r, "authenticatedUrID")
+}
 
 func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
 	if td == nil {

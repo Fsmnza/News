@@ -25,6 +25,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		NewsArray: s,
 	})
 }
+
 func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
@@ -40,12 +41,16 @@ func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
-	if n == nil {
-		app.notFound(w)
+	comments, err := app.news.GetComment(id)
+	if err != nil {
+		app.serverError(w, err)
 		return
 	}
+	userID := app.session.GetInt(r, "authenticatedUserID")
 	app.render(w, r, "show.page.tmpl", &templateData{
-		News: n,
+		News:                n,
+		CommentList:         comments,
+		AuthenticatedUserID: userID,
 	})
 }
 func (app *application) creationPage(w http.ResponseWriter, r *http.Request) {
@@ -199,4 +204,58 @@ func (app *application) Role(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/user/admin", http.StatusSeeOther)
+}
+func (app *application) AddComments(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		app.clientError(w, http.StatusMethodNotAllowed)
+		return
+	}
+	userId := app.session.GetInt(r, "authenticatedUserID")
+	newsId, err := strconv.Atoi(r.FormValue("newsID"))
+	if err != nil {
+		app.serverError(w, err)
+	}
+	text := r.FormValue("text")
+	err = app.comments.Insert(userId, newsId, text)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/news?id=%d", newsId), http.StatusSeeOther)
+}
+func (app *application) deleteComment(w http.ResponseWriter, r *http.Request) {
+	userID := app.session.GetInt(r, "authenticatedUserID")
+	user, err := app.users.Get(userID)
+
+	commentID, err := strconv.Atoi(r.FormValue("commentID"))
+	if err != nil || commentID < 1 {
+		app.serverError(w, err)
+		return
+	}
+	newsId, err := app.comments.GetNewsId(commentID)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	authorId, err := app.comments.GetAuthorId(commentID)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	if user.Role != "admin" && userID != authorId {
+		app.session.Put(r, "flash", "You can only delete your own comments!")
+		http.Redirect(w, r, fmt.Sprintf("/news?id=%d", newsId), http.StatusSeeOther)
+		return
+	}
+	err = app.comments.Delete(commentID)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/news?id=%d", newsId), http.StatusSeeOther)
 }

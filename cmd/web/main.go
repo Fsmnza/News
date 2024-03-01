@@ -20,11 +20,12 @@ type application struct {
 	news          *mysql.NewsModel
 	templateCache map[string]*template.Template
 	users         *mysql.UserModel
+	comments      *mysql.CommentsModel
 }
 
 func main() {
 	data := "user=postgres password=postgres dbname=news sslmode=disable host=localhost port=5431"
-	addr := flag.String("addr", ":8790", "HTTP network address")
+	addr := flag.String("addr", ":8780", "HTTP network address")
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
 	flag.Parse()
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -47,6 +48,7 @@ func main() {
 		news:          &mysql.NewsModel{DB: db},
 		templateCache: templateCache,
 		users:         &mysql.UserModel{DB: db},
+		comments:      &mysql.CommentsModel{DB: db},
 	}
 	srv := &http.Server{
 		Addr:     *addr,

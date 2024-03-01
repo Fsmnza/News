@@ -7,14 +7,16 @@ import (
 )
 
 type templateData struct {
-	News            *models.News
-	CurrentYear     int
-	Flash           string
-	Category        string
-	IsAuthenticated bool
-	NewsArray       []*models.News
-	UserRole        string
-	UserArray       []*models.User
+	News                *models.News
+	CurrentYear         int
+	Flash               string
+	Category            string
+	IsAuthenticated     bool
+	NewsArray           []*models.News
+	UserRole            string
+	UserArray           []*models.User
+	CommentList         []*models.Comments
+	AuthenticatedUserID int
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
